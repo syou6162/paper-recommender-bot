@@ -3,7 +3,7 @@
   (:require [clj-http.client :as client])
   (:require [clojure.data.json :as json]))
 
-(def max-paper-num 3)
+(def max-paper-num 5)
 
 (defn paper-recommendations-handler [{text :text}]
   (let [base-url "http://paper-recommender.herokuapp.com"]
