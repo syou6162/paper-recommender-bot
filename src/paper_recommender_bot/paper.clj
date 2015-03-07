@@ -5,14 +5,17 @@
 
 (def max-paper-num 3)
 
-(defn paper-recommendations-hander
-  [{text :text}]
+(defn paper-recommendations-handler [{text :text}]
   (let [base-url "http://paper-recommender.herokuapp.com"]
     (if (= text "paper")
       (->> (get (client/get base-url) :body)
            (json/read-str)
+           (sort-by (fn [item] (get item "score")) >)
            (take max-paper-num)
-           (map str)
-           (clojure.string/join "\n")))))
-
-(paper-recommendations-hander {:text "paper"})
+           (map
+            (fn [item]
+              (str
+               (get item "title") "\n"
+               (clojure.string/join "\t" (get item "authors")) "\n"
+               (str (get item "url")) ".pdf")))
+           (clojure.string/join "\n\n")))))
